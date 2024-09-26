@@ -3,6 +3,7 @@ from pyrogram import Client
 from data import config
 import os
 
+
 class Accounts:
     def __init__(self):
         self.workdir = config.WORKDIR
@@ -23,9 +24,9 @@ class Accounts:
         valid_sessions = []
         if config.USE_PROXY:
             proxy_dict = {}
-            with open('proxy.txt','r') as file:
+            with open('proxy.txt', 'r') as file:
                 proxy_list = [i.strip().split() for i in file.readlines() if len(i.strip().split()) == 2]
-                for prox,name in proxy_list:
+                for prox, name in proxy_list:
                     proxy_dict[name] = prox
             for session in sessions:
                 try:
@@ -38,7 +39,8 @@ class Accounts:
                             "username": proxy.split(':')[2],
                             "password": proxy.split(':')[3],
                         }
-                        client = Client(name=session, api_id=self.api_id, api_hash=self.api_hash, workdir=self.workdir,proxy=proxy_client)
+                        client = Client(name=session, api_id=self.api_id, api_hash=self.api_hash, workdir=self.workdir,
+                                        proxy=proxy_client)
 
                         if await client.connect():
                             valid_sessions.append(session)
@@ -53,11 +55,11 @@ class Accounts:
                             valid_sessions.append(session)
                         else:
                             logger.error(f"{session}.session is invalid")
-                        await client.disconnect()       
+                        await client.disconnect()
                 except:
                     logger.error(f"{session}.session is invalid")
-            logger.success(f"Валидных сессий: {len(valid_sessions)}; Невалидных: {len(sessions)-len(valid_sessions)}")
-                
+            logger.success(f"Валидных сессий: {len(valid_sessions)}; Невалидных: {len(sessions) - len(valid_sessions)}")
+
         else:
             for session in sessions:
                 try:
@@ -70,7 +72,7 @@ class Accounts:
                     await client.disconnect()
                 except:
                     logger.error(f"{session}.session is invalid")
-            logger.success(f"Валидных сессий: {len(valid_sessions)}; Невалидных: {len(sessions)-len(valid_sessions)}")
+            logger.success(f"Валидных сессий: {len(valid_sessions)}; Невалидных: {len(sessions) - len(valid_sessions)}")
         return valid_sessions
 
     async def get_accounts(self):
